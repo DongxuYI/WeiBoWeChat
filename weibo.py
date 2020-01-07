@@ -109,7 +109,7 @@ def get_weibo(id, file, filename):
                         # 保存文本
                         with open(file, 'a', encoding='utf-8') as fh:
                             if len(str(created_at)) < 6:
-                                created_at = '2019-' + str(created_at)
+                                created_at = str(created_at)
                             # 页数、条数、微博地址、发布时间、微博内容、点赞数、评论数、转发数、图片链接
                             fh.write(str(i) + '\t' + str(j) + '\t' + str(scheme) + '\t' + str(
                                 created_at) + '\t' + text + '\t' + str(attitudes_count) + '\t' + str(
