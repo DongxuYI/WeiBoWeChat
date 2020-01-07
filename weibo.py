@@ -14,10 +14,75 @@ import json
 import xlwt
 
 # 定义要爬取的微博大V的微博ID
-id = '5054701289'
+# 2409114274 黑龙江省图书馆
+# 2608219435 哈尔滨市图书馆
+# 6128752536 齐齐哈尔图书馆
+# 鸡西市图书馆
+# 6329499161 鹤岗市图书馆
+# 双鸭山市图书馆
+# 3800463069 大庆市图书馆
+# 伊春市图书馆
+# 佳木斯市图书馆
+# 七台河图书馆
+# 6233305361 牡丹江市图书馆
+# 1707407605 绥化市北林区图书馆
+# 1373517133 吉林省图书馆
+# 2727738163 长春市图书馆
+# 1080087592 吉林省吉林市图书馆
+# 5087890014 四平市图书馆
+# 辽源市图书馆
+# 6225156153 通化市图书馆
+# 白山市图书馆
+# 松原市图书馆
+# 白城市图书馆
+# 3504018477 辽宁省图书馆
+# 3349135200 沈阳市图书馆
+# 2043274575 大连图书馆
+# 2786857105 鞍山市图书馆
+# 1944439460 抚顺市图书馆
+# 1745228087 本溪市图书馆
+# 丹东市图书馆
+# 6260486243 锦州市图书馆
+# 1400563524 营口图书馆
+# 阜新市图书馆
+# 5977347236 辽阳市图书馆
+# 5678809695 盘锦市图书馆
+# 6146856129 铁岭市图书馆
+# 2475474210 辽宁省朝阳市图书馆
+# 葫芦岛市图书馆
+
+ids = [
+    "2409114274",
+    "2608219435",
+    "6128752536",
+    "6329499161",
+    "3800463069",
+    "6233305361",
+    "1707407605",
+    "1373517133",
+    "2727738163",
+    "1080087592",
+    "5087890014",
+    "6225156153",
+    "3504018477",
+    "3349135200",
+    "2043274575",
+    "2786857105",
+    "1944439460",
+    "1745228087",
+    "6260486243",
+    "1400563524",
+    "5977347236",
+    "5678809695",
+    "6146856129",
+    "2475474210"
+]
+
+id = '6128752536'
 
 # 设置代理IP
-proxy_addr = "122.241.72.191:808"
+
+proxy_addr = "122.241.72.199:808"
 
 
 # 定义页面打开函数
@@ -96,6 +161,11 @@ def get_weibo(id, file, filename):
                         comments_count = mblog.get('comments_count')  # 评论数
                         created_at = mblog.get('created_at')  # 发布时间
                         reposts_count = mblog.get('reposts_count')  # 转发数
+                        if mblog.get('retweeted_status'):  # 是否原创
+                            retweet = "原创"
+                        else:
+                            retweet = "转发"
+
                         scheme = cards[j].get('scheme')  # 微博地址
                         text = mblog.get('text')  # 微博内容
                         pictures = mblog.get('pics')  # 正文配图，返回list
@@ -113,7 +183,7 @@ def get_weibo(id, file, filename):
                             # 页数、条数、微博地址、发布时间、微博内容、点赞数、评论数、转发数、图片链接
                             fh.write(str(i) + '\t' + str(j) + '\t' + str(scheme) + '\t' + str(
                                 created_at) + '\t' + text + '\t' + str(attitudes_count) + '\t' + str(
-                                comments_count) + '\t' + str(reposts_count) + '\t' + str(pic_urls) + '\n')
+                                comments_count) + '\t' + str(reposts_count) + '\t' + str(pic_urls) + '\t' + retweet + '\n')
 
                         # 保存图片
                         savepic(pic_urls, created_at, i, j, filename)
@@ -148,6 +218,7 @@ def txt_xls(filename, xlsname):
             sheet.write(0, 6, '评论数')
             sheet.write(0, 7, '转发数')
             sheet.write(0, 8, '图片链接')
+            sheet.write(0, 9, '是否原创')
             x = 1
             while True:
                 # 按行循环，读取文本文件
@@ -165,11 +236,16 @@ def txt_xls(filename, xlsname):
 
 if __name__ == "__main__":
     name = get_userInfo(id)
-    file = str(name) + id + ".txt"
-    get_weibo(id, file, name)
-
-    txtname = file
+    txtname = str(name) + id + ".txt"
     xlsname = str(name) + id + ".xls"
+
+    if os.path.exists(txtname):
+        os.remove(txtname)
+
+    get_weibo(id, txtname, name)
+
+    if os.path.exists(xlsname):
+        os.remove(xlsname)
     txt_xls(txtname, xlsname)
 
 print('finish')
