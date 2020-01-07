@@ -63,9 +63,9 @@ def get_userInfo(id):
 
 
 # 保存图片
-def savepic(pic_urls, created_at, page, num):
+def savepic(pic_urls, created_at, page, num, filename):
     pic_num = len(pic_urls)
-    srcpath = 'weibo_img/伊/'
+    srcpath = 'weibo_img/' + filename + '/'
     if not os.path.exists(srcpath):
         os.makedirs(srcpath)
     picpath = str(created_at) + 'page' + str(page) + 'num' + str(num) + 'pic'
@@ -76,7 +76,7 @@ def savepic(pic_urls, created_at, page, num):
 
 
 # 获取微博内容信息,并保存到文本中，内容包括：每条微博的内容、微博详情页面地址、点赞数、评论数、转发数等
-def get_weibo(id, file):
+def get_weibo(id, file, filename):
     i = 1
     while True:
         url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=' + id
@@ -116,7 +116,7 @@ def get_weibo(id, file):
                                 comments_count) + '\t' + str(reposts_count) + '\t' + str(pic_urls) + '\n')
 
                         # 保存图片
-                        savepic(pic_urls, created_at, i, j)
+                        savepic(pic_urls, created_at, i, j, filename)
                 i += 1
                 '''休眠1s以免给服务器造成严重负担'''
                 time.sleep(1)
@@ -166,7 +166,7 @@ def txt_xls(filename, xlsname):
 if __name__ == "__main__":
     name = get_userInfo(id)
     file = str(name) + id + ".txt"
-    get_weibo(id, file)
+    get_weibo(id, file, name)
 
     txtname = file
     xlsname = str(name) + id + ".xls"
