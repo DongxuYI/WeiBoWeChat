@@ -20,7 +20,7 @@ colorama==0.4.1
 crcmod==1.7
 cryptography==2.7
 cssselect==1.0.3
-Django==2.2.3
+Django==2.2.8
 dnspython==1.16.0
 docx==0.2.4
 eventlet==0.25.0
