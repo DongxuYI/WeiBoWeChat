@@ -13,10 +13,10 @@ conn = pymysql.connect(host='47.101.170.173',
                        )
 
 # 没有导入
-startIndex = 924
+startIndex = 13067
 def readexcel(startIndex):
     # 1175
-    if startIndex > 1174:
+    if startIndex > 13073:
         return
     conn.commit()
     print(startIndex)

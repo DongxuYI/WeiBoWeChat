@@ -5,7 +5,7 @@ import xlwt
 import time
 
 # 上次爬到了5156页
-user = 5156
+user = 12932
 
 
 def spider(user):

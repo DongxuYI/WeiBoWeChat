@@ -1,18 +1,11 @@
 import time
 import pymysql  # 连接数据库
-import requests
 import xlwt
-from bs4 import BeautifulSoup
 from pymysql.cursors import DictCursor
-import xlrd
 
 # -*-coding:utf-8-*-
-import re
 import requests
-import bs4
 from bs4 import BeautifulSoup
-import json
-import codecs
 import sys
 import os
 
@@ -36,12 +29,12 @@ def craw(index, url, item):
     data['name'] = item
     soup = BeautifulSoup(html, 'lxml')
     title = soup.find('h2').get_text()
-    data['abstract'] = soup.find('div', class_='lemma-summary').get_text().strip().replace('\n', '').replace('\t','')
+    data['abstract'] = soup.find('div', class_='lemma-summary').get_text().strip().replace('\n', '').replace('\t', '')
     basic_info = soup.find('div', class_='basic-info')
     dts = basic_info.find_all('dt', class_='name')
     dds = basic_info.find_all('dd', class_='value')
     data['basic_info'] = dict()
-    print(data["abstract"])
+    # print(data["abstract"])
 
     for i in range(len(dts)):
         name = dts[i].get_text().strip().replace('\n', '').replace('\t', '')
@@ -80,32 +73,21 @@ def craw(index, url, item):
             else:
                 content[name] += text
     data['content'] = content
-    with open("biographyX.xls", 'a+', encoding='utf-8') as f:
-        xls = xlwt.Workbook()
-        sheet = xls.add_sheet('sheet1', cell_overwrite_ok=True)
 
-        # # 保存文本
-        for i in range(1, 3):  # 1,2
-            if i == 1:
-                item = item
-            if i == 2:
-                item = data["abstract"]
-            print(index, i, item)
-            sheet.write(index, i - 1, item)  # x单元格行，i 单元格列
-
-            xls.save("biographyX.xls")  # 保存xls文件
+    return data
 
 
 if __name__ == '__main__':
     baseurl = 'http://baike.baidu.com/item/'
     # items = ['Python', u'北京市', u'朝阳区']
-    conn = pymysql.connect(host='47.101.170.173', user='root', passwd='YI.9694482664', port=3306, db='poetry',charset='utf8')
+    conn = pymysql.connect(host='47.101.170.173', user='root', passwd='YI.9694482664', port=3306, db='poetry',
+                           charset='utf8')
     items = []
     try:
         cur = conn.cursor(DictCursor)
         cur.execute("SELECT name,dynasty from author")
         total = cur.fetchall()
-        print(total)
+        # print(total)
         for i in total:
             items.append(i["name"])
         cur.close()
@@ -115,11 +97,26 @@ if __name__ == '__main__':
         conn.close()  # 关闭连接
         pass
 
+    with open("biographyX.xls", 'a+', encoding='utf-8') as f:
+        xls = xlwt.Workbook()
+        sheet = xls.add_sheet('sheet1', cell_overwrite_ok=True)
+
     for item in items:
         url = baseurl + item
         index = items.index(item)
-        print(index,item)
-        craw(index,url, item)
+        print(index, item)
+        try:
+            data = craw(index, url, item)
+        except:
+            continue
+
+        for i in range(1, 4):  # 1,2,3
+            if i == 1:
+                item = item
+            if i == 2:
+                item = data["abstract"]
+            if i == 3:
+                item = str(data)
+            sheet.write(index, i - 1, item)  # x单元格行，i 单元格列
+            xls.save("biographyX.xls")  # 保存xls文件
         time.sleep(5)
-# if __name__ == '__main__':
-#     main()
