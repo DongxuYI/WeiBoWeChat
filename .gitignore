@@ -1,0 +1,6 @@
+/content/
+*.zip
+*.rar
+
+.vscode
+.idea
