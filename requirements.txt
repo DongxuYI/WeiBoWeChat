@@ -1,4 +1,4 @@
-aiohttp==3.5.4
+aiohttp==3.7.4
 alembic==1.0.11
 aliyun-python-sdk-core==2.13.5
 aliyun-python-sdk-core-v3==2.13.3
