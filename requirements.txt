@@ -99,7 +99,7 @@ typed-ast==1.3.1
 unrar==0.3
 urllib3==1.25.3
 webencodings==0.5.1
-websockets==7.0
+websockets==9.1
 wechatsogou==4.5.4
 Werkzeug==0.15.4
 wrapt==1.11.1
