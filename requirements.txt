@@ -60,7 +60,7 @@ multidict==4.5.2
 mysql-connector-python==8.0.15
 mysqlclient==1.4.2.post1
 oss2==2.8.0
-Pillow==6.0.0
+Pillow==9.3.0
 prettytable==0.7.2
 protobuf==3.9.1
 pycodestyle==2.5.0
